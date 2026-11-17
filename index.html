@@ -3,196 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NPTEL Online Certification - Verify Certificate</title>
-    <link rel="icon" type="image/png" href="https://nptel.ac.in/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <title>NPTEL - Verify Certificate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .certificate-container {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+
+        .certificate-wrapper {
+            overflow: auto;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .certificate-wrapper:active {
+            cursor: grabbing;
+        }
+
+        .certificate-inner {
+            transition: transform 0.2s ease;
+            transform-origin: center center;
+        }
+
+        .certificate-img {
+            max-width: 900px;
+            width: 100%;
+            height: auto;
+            display: block;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.12);
+            user-select: none;
+            -webkit-user-select: none;
+            pointer-events: none;
+        }
+
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+
+        .zoom-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            transition: background 0.15s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .zoom-btn:hover {
+            background: #e8e8e8;
+        }
+
+        .zoom-level {
+            font-size: 13px;
+            color: #666;
+            min-width: 44px;
+            text-align: center;
+            font-family: monospace;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+            .certificate-img {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="top-bar-content">
-            <span>An Initiative by IITs and IISc – Funded by MHRD, Govt. of India</span>
+
+    <div class="certificate-container">
+        <div class="certificate-wrapper" id="viewer">
+            <div class="certificate-inner" id="inner">
+                <img src="certificate.jpg" alt="NPTEL Certificate" class="certificate-img" id="certImg" draggable="false">
+            </div>
+        </div>
+        <div class="zoom-controls">
+            <button class="zoom-btn" id="zoomOut" title="Zoom Out">−</button>
+            <span class="zoom-level" id="zoomLevel">100%</span>
+            <button class="zoom-btn" id="zoomIn" title="Zoom In">+</button>
+            <button class="zoom-btn" id="resetBtn" title="Reset" style="font-size:14px;">↺</button>
         </div>
     </div>
 
-    <!-- Header / Navbar -->
-    <header class="navbar">
-        <div class="navbar-content">
-            <div class="navbar-left">
-                <a href="#" class="logo-link">
-                    <img src="https://archive.nptel.ac.in/assets/nptelLogo2.png" alt="NPTEL" class="nptel-logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'logo-text\'>NPTEL</span>'">
-                </a>
-            </div>
-            <div class="navbar-right">
-                <nav class="nav-links">
-                    <a href="#">Courses</a>
-                    <a href="#">About Us</a>
-                    <a href="#">Certification</a>
-                    <a href="#" class="active">Verify Certificate</a>
-                </nav>
-                <div class="hamburger" id="hamburger">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </div>
-        </div>
-    </header>
+    <script>
+        const inner = document.getElementById('inner');
+        const viewer = document.getElementById('viewer');
+        const zoomDisplay = document.getElementById('zoomLevel');
+        let zoom = 1;
 
-    <!-- Mobile Nav -->
-    <div class="mobile-nav" id="mobileNav">
-        <a href="#">Courses</a>
-        <a href="#">About Us</a>
-        <a href="#">Certification</a>
-        <a href="#" class="active">Verify Certificate</a>
-    </div>
+        function setZoom(z) {
+            zoom = Math.max(0.25, Math.min(4, z));
+            inner.style.transform = 'scale(' + zoom + ')';
+            zoomDisplay.textContent = Math.round(zoom * 100) + '%';
+        }
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Verification Info Section -->
-        <div class="verify-section">
-            <div class="verify-header">
-                <div class="verify-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="verify-info">
-                    <h1>Certificate Verified</h1>
-                    <p class="verify-id">Verification ID: <strong>NOC-HZFD-VDDC-H84K0</strong></p>
-                </div>
-            </div>
+        document.getElementById('zoomIn').onclick = () => setZoom(zoom + 0.15);
+        document.getElementById('zoomOut').onclick = () => setZoom(zoom - 0.15);
+        document.getElementById('resetBtn').onclick = () => setZoom(1);
 
-            <!-- Certificate Details Card -->
-            <div class="details-card">
-                <div class="details-grid">
-                    <div class="detail-item">
-                        <span class="detail-label">Name</span>
-                        <span class="detail-value">JOSHIK R</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Course</span>
-                        <span class="detail-value">Introduction To Machine Learning</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Consolidated Score</span>
-                        <span class="detail-value">55%</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Online Assignments</span>
-                        <span class="detail-value">24.22/25</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Proctored Exam</span>
-                        <span class="detail-value">30.75/75</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Duration</span>
-                        <span class="detail-value">JUL-OCT 2026 (12 week course)</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Roll Number</span>
-                        <span class="detail-value">NPTEL26CS133S585207002</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Credits Recommended</span>
-                        <span class="detail-value">4</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        viewer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            setZoom(zoom + (e.deltaY < 0 ? 0.1 : -0.1));
+        }, { passive: false });
 
-        <!-- Certificate Viewer Section -->
-        <div class="viewer-section">
-            <div class="viewer-toolbar">
-                <div class="toolbar-left">
-                    <span class="toolbar-title"><i class="fas fa-certificate"></i> Certificate Preview</span>
-                </div>
-                <div class="toolbar-controls">
-                    <button class="toolbar-btn" id="zoomOut" title="Zoom Out">
-                        <i class="fas fa-search-minus"></i>
-                    </button>
-                    <span class="zoom-level" id="zoomLevel">100%</span>
-                    <button class="toolbar-btn" id="zoomIn" title="Zoom In">
-                        <i class="fas fa-search-plus"></i>
-                    </button>
-                    <button class="toolbar-btn" id="resetZoom" title="Reset Zoom">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <div class="toolbar-divider"></div>
-                    <button class="toolbar-btn" id="fitWidth" title="Fit Width">
-                        <i class="fas fa-arrows-alt-h"></i>
-                    </button>
-                    <button class="toolbar-btn" id="downloadBtn" title="Download Certificate">
-                        <i class="fas fa-download"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="viewer-container" id="viewerContainer">
-                <div class="viewer-wrapper" id="viewerWrapper">
-                    <img 
-                        src="certificate.jpg" 
-                        alt="NPTEL Certificate - JOSHIK R - Introduction To Machine Learning" 
-                        class="certificate-img" 
-                        id="certificateImg"
-                        draggable="false"
-                    >
-                </div>
-            </div>
-        </div>
+        // Pan
+        let panning = false, sx, sy, sl, st;
+        viewer.onmousedown = (e) => { panning = true; sx = e.pageX; sy = e.pageY; sl = viewer.scrollLeft; st = viewer.scrollTop; };
+        viewer.onmouseup = viewer.onmouseleave = () => panning = false;
+        viewer.onmousemove = (e) => { if (!panning) return; viewer.scrollLeft = sl - (e.pageX - sx); viewer.scrollTop = st - (e.pageY - sy); };
 
-        <!-- Verification Link -->
-        <div class="verification-link-section">
-            <div class="link-card">
-                <i class="fas fa-link"></i>
-                <div class="link-info">
-                    <span class="link-label">Permanent Verification Link</span>
-                    <a href="https://beta.nptel.ac.in/verify/NOC-HZFD-VDDC-H84K0" class="link-url" id="verifyLink">
-                        https://beta.nptel.ac.in/verify/NOC-HZFD-VDDC-H84K0
-                    </a>
-                </div>
-                <button class="copy-btn" id="copyBtn" title="Copy Link">
-                    <i class="fas fa-copy"></i>
-                    <span>Copy</span>
-                </button>
-            </div>
-        </div>
-    </main>
+        // Double click toggle
+        viewer.ondblclick = () => setZoom(zoom >= 1.5 ? 1 : zoom + 0.5);
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-top">
-                <div class="footer-col">
-                    <h4>NPTEL</h4>
-                    <p>National Programme on Technology Enhanced Learning — a project of MHRD, Govt. of India.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <a href="#">Courses</a>
-                    <a href="#">Certification</a>
-                    <a href="#">Hall of Fame</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Support</h4>
-                    <a href="#">FAQ</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#">Grievance</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Connect</h4>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 NPTEL. All rights reserved. | Indian Institute of Technology Madras</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+        // Keyboard
+        document.onkeydown = (e) => {
+            if (e.key === '=' || e.key === '+') setZoom(zoom + 0.15);
+            else if (e.key === '-') setZoom(zoom - 0.15);
+            else if (e.key === '0') setZoom(1);
+        };
+    </script>
 </body>
 </html>
