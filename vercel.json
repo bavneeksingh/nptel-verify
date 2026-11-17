@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/:rollno/verify/:path*", "destination": "/index.html" },
     { "source": "/verify/:path*", "destination": "/index.html" }
   ]
 }
