@@ -10,14 +10,19 @@
             background: #fff;
             display: flex;
             justify-content: center;
-            padding: 40px 20px;
+            align-items: flex-start;
             min-height: 100vh;
+            padding: 20px;
         }
         img {
             max-width: 900px;
             width: 100%;
             height: auto;
             display: block;
+        }
+        @media (max-width: 600px) {
+            body { padding: 0; }
+            img { max-width: 100%; }
         }
     </style>
 </head>
